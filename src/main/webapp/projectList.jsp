@@ -6,8 +6,8 @@
 <body>
 <h2>Project List</h2>
 <form method="post" action="projectList.do">
-    <button type="submit">logout</button>
-    <button type="submit">project</button>
+    <button type="submit" name="btn_logout">logout</button>
+    <button type="submit" name="btn_project">project</button>
 </form>
 </body>
 </html>

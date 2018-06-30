@@ -10,10 +10,44 @@
         <display-name>LoginServlet</display-name>
         <servlet-class>com.marketahalikova.jdbctest.controllers.LoginServlet</servlet-class>
     </servlet>
-    
+
+    <servlet>
+        <servlet-name>ProjectListServlet</servlet-name>
+        <display-name>ProjectListServlet</display-name>
+        <servlet-class>com.marketahalikova.jdbctest.controllers.ProjectListServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ProjectDetailServlet</servlet-name>
+        <display-name>ProjectDetailServlet</display-name>
+        <servlet-class>com.marketahalikova.jdbctest.controllers.ProjectDetailServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ErrorServlet</servlet-name>
+        <display-name>ErrorServlet</display-name>
+        <servlet-class>com.marketahalikova.jdbctest.controllers.ErrorServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login.do</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet-mapping>
+        <servlet-name>ProjectListServlet</servlet-name>
+        <url-pattern>/projectList.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ProjectDetailServlet</servlet-name>
+        <url-pattern>/projectDetail.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ErrorServlet</servlet-name>
+        <url-pattern>/error.do</url-pattern>
     </servlet-mapping>
 
     <!-- nacteni uvodni stranky -->

@@ -7,16 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class LoginServlet extends HttpServlet {
+public class ErrorServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        String userName = req.getParameter("userName");
-        String password = req.getParameter("inputPassword");
-        System.out.println( "password:" + password + "  username:" + userName);
-        System.out.println(String.format("username: %s   password: %s", userName, password));
-        resp.sendRedirect("projectList.jsp");
+        resp.sendRedirect("login.jsp");
     }
 }
 
