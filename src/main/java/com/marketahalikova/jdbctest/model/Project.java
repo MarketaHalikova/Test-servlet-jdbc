@@ -1,5 +1,6 @@
 package com.marketahalikova.jdbctest.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
@@ -11,9 +12,11 @@ public class Project {
     private List<Font> listFonts;
 
     public Project() {
+        listFonts = new ArrayList<>();
     }
 
     public Project(String name, String gitURL) {
+        this();
         this.name = name;
         this.gitURL = gitURL;
     }
