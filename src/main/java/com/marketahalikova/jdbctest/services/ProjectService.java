@@ -3,9 +3,10 @@ package com.marketahalikova.jdbctest.services;
 import com.marketahalikova.jdbctest.model.Project;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProjectService {
 
     List<Project> findAll();
-    Project findById(Long id);
+    Optional<Project> findById(Long id);
 }
