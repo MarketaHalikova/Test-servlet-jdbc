@@ -14,42 +14,49 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public class LoginServlet extends HttpServlet {
 
-    private UserService userService = new UserServiceImpl();
-    private ProjectService projectService = new ProjectServiceImpl();
+    private UserService userService;
+    private ProjectService projectService;
+
+    public LoginServlet() throws SQLException {
+        userService = new UserServiceImpl();
+        projectService = new ProjectServiceImpl();
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String userName = req.getParameter("userName");
-        String password = req.getParameter("inputPassword ");
-        System.out.println("password:" + password + "  username:" + userName);
-        System.out.println(String.format("username: %s   password: %s", userName, password));
+        String password = req.getParameter("inputPassword");
 
-
-        Optional<User> user = userService.getUserByNameByPassword(userName, password);
-
+        Optional<User> user = null;
+        try {
+            user = userService.getUserByNameByPassword(userName, password);
+        } catch (SQLException e) {
+             resp.sendRedirect("error.jsp");
+             return;
+        }
 
         if (user.isPresent()) {
-
             req.getSession().setAttribute("userLogged", user.get());
-
-
-            List<Project> projects = projectService.findAll();
+            List<Project> projects = null;
+            try {
+                projects = projectService.findAll();
+            } catch (SQLException e) {
+               throw new IOException(e);
+            }
 
             req.setAttribute("projects", projects);
-
-
             RequestDispatcher requestDispatcher = req.getRequestDispatcher("projectList.jsp");
             requestDispatcher.forward(req, resp);
         } else {
             resp.sendRedirect("error.jsp");
         }
-
 
     }
 }

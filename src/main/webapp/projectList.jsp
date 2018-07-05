@@ -42,12 +42,12 @@
 %>
 
 
-        <tr>
-            <td><%= project.getId()%></td>
-            <td><%= project.getName()%></td>
-            <td><%= project.getGitURL()%></td>
-            <td><button type="submit" name="btn_project" value="<%= project.getId()%>">detail</button></td>
-        </tr>
+<tr>
+    <td><%= project.getId()%></td>
+    <td><%= project.getName()%></td>
+    <td><%= project.getGitURL()%></td>
+    <td><button type="submit" name="btn_project" value="<%= project.getId()%>">detail</button></td>
+</tr>
 <%
     }
 %>

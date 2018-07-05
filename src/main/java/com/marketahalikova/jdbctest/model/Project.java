@@ -60,4 +60,15 @@ public class Project {
     public void setListFonts(List<Font> listFonts) {
         this.listFonts = listFonts;
     }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", gitURL='" + gitURL + '\'' +
+                ", listFonts=" + listFonts +
+                '}';
+    }
 }

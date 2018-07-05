@@ -1,6 +1,13 @@
 package com.marketahalikova.jdbctest.database;
 
+import com.marketahalikova.jdbctest.model.Font;
+import com.marketahalikova.jdbctest.model.Project;
+import com.marketahalikova.jdbctest.repositories.ProjectRepository;
+import com.marketahalikova.jdbctest.repositories.ProjectRepositoryJdbc;
+
 import java.sql.*;
+import java.util.List;
+import java.util.Optional;
 
 public class Database {
 
@@ -8,10 +15,25 @@ public class Database {
             "&useLegacyDatetimeCode=false&serverTimezone=UTC";
     public static final String USER_NAME = "root";
     public static final String PASSWORD = "admin";
-    Connection connection;
+    private Connection connection;
 
-    public Database(String dbConnectionString, String userName, String password) throws SQLException {
+    private static Database database;
 
+    public synchronized static Database getInstance() throws SQLException {
+        if(!Optional.ofNullable(database).isPresent()){
+            database = new Database(DB_CONNECTION_STRING, USER_NAME, PASSWORD);
+        }
+        return database;
+    }
+
+    private Database(String dbConnectionString, String userName, String password) throws SQLException {
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException();
+        }
 
         connection = DriverManager.getConnection(dbConnectionString, userName, password);
 
@@ -31,8 +53,59 @@ public class Database {
         Database database = new Database(
                 DB_CONNECTION_STRING, USER_NAME, PASSWORD);
 
-        int id = database.insert("INSERT INTO user (user_name, password) VALUES ('jan','23456')");
-        System.out.println(id);
+//        int id = database.insert("INSERT INTO user (user_name, password) VALUES ('jan','23456')");
+        //       System.out.println(id);
+
+//        String password = "12345";
+//        String userName = "mar";
+//        List<String> params = new ArrayList<>();
+//        params.add(userName);
+//        params.add(password);
+//        ResultSet resultSet = database.select("SELECT * FROM user WHERE user_name = ? AND password = ? ", params);
+
+//        String sql = "UPDATE user SET user_name=?, password=? WHERE id=?";
+//        List<String> params = new ArrayList<>();
+//        params.add("newName");
+//        params.add("newPassword");
+//        params.add("3");
+//        int updated = database.update(sql, params);
+//        System.out.println("updated rows= " + updated);
+//        params.clear();
+//        params.add("3");
+//        ResultSet rs = database.select("SELECT id, user_name, password FROM user WHERE id=?", params);
+//        while (rs.next()) {
+//            System.out.print("User:  ");
+//            System.out.print(rs.getString("user_name"));
+//            System.out.print("  password=" + rs.getString("password"));
+//            System.out.print("  id=" + rs.getInt("id"));
+//            System.out.println();
+//        }
+
+//        while (resultSet.next()) {
+//
+//            System.out.print("User:  ");
+//            System.out.print(resultSet.getString("user_name"));
+//            System.out.print("  id=" + resultSet.getInt("id"));
+//            System.out.print("  password=" + resultSet.getInt("password"));
+//            System.out.println();
+//
+//        }
+
+
+        ProjectRepository projectRepository;
+        projectRepository = new ProjectRepositoryJdbc();
+        Project project = projectRepository.findById(1L).get();
+
+        System.out.println(project);
+
+        project.setName("mouse");
+        Font font = project.getListFonts().get(0);
+        font.setFontName("Symbol");
+
+        projectRepository.update(project);
+        project = projectRepository.findById(1L).get();
+        System.out.println(project);
+
         database.destroy();
     }
 
@@ -49,12 +122,36 @@ public class Database {
 
     }
 
-    public ResultSet select(String sql) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        ResultSet result = preparedStatement.executeQuery(sql);
-
+    public ResultSet select(String sql, List<String> params) throws SQLException {
+        PreparedStatement preparedStatement = prepareStatement(sql, params);
+        ResultSet result = preparedStatement.executeQuery();
         return result;
     }
 
+    public int update(String aSql, List<String> params) throws SQLException {
 
+        PreparedStatement ps = prepareStatement(aSql, params);
+        int result = ps.executeUpdate();
+        return result;
+
+
+    }
+
+
+    private PreparedStatement prepareStatement(String aSql, List<String> params) throws SQLException {
+
+        PreparedStatement ps = connection.prepareStatement(aSql);
+        if (params != null) {
+            int index = 1;
+            for (Object param : params) {
+                ps.setObject(index, param);
+                index++;
+            }
+        }
+        return ps;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
 }

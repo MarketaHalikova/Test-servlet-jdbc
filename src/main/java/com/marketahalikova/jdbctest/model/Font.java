@@ -36,4 +36,13 @@ public class Font {
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
     }
+
+    @Override
+    public String toString() {
+        return "Font{" +
+                "id=" + id +
+                ", fontName='" + fontName + '\'' +
+                ", projectId=" + projectId +
+                '}';
+    }
 }
